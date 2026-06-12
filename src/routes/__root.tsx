@@ -77,14 +77,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "NYSA DE LUXURIA — Luxury Interior Architecture & Bespoke Design" },
-      { name: "description", content: "NYSA DE LUXURIA is a luxury interior architecture and turnkey design consultancy crafting bespoke residences, villas, penthouses, and hospitality experiences for discerning visionaries." },
+      { title: "NYSA D LUXURIA — Luxury Interior Architecture & Bespoke Design" },
+      { name: "description", content: "NYSA D LUXURIA is a luxury interior architecture and turnkey design consultancy crafting bespoke residences, villas, penthouses, and hospitality experiences for discerning visionaries." },
       { name: "author", content: "NYSA DE LUXURIA" },
-      { property: "og:title", content: "NYSA DE LUXURIA — Luxury Interior Architecture" },
-      { property: "og:description", content: "Bespoke luxury interiors, architecture and turnkey experiences crafted for visionaries." },
+      { property: "og:title", content: "NYSA D LUXURIA — Luxury Interior Architecture & Bespoke Design" },
+      { property: "og:description", content: "NYSA D LUXURIA is a luxury interior architecture and turnkey design consultancy crafting bespoke residences, villas, penthouses, and hospitality experiences for discerning visionaries." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@NYSADLuxuria" },
+      { name: "twitter:title", content: "NYSA D LUXURIA — Luxury Interior Architecture & Bespoke Design" },
+      { name: "twitter:description", content: "NYSA D LUXURIA is a luxury interior architecture and turnkey design consultancy crafting bespoke residences, villas, penthouses, and hospitality experiences for discerning visionaries." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/e1acd0ae-aae7-415a-8301-990e26a225e9/id-preview-9df9126b--b5cf8842-f3cb-4cb3-9f53-0d7d46580811.lovable.app-1781242741310.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/e1acd0ae-aae7-415a-8301-990e26a225e9/id-preview-9df9126b--b5cf8842-f3cb-4cb3-9f53-0d7d46580811.lovable.app-1781242741310.png" },
     ],
     links: [
       {
