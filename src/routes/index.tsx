@@ -14,9 +14,9 @@ import consultationBg from "@/assets/consultation-bg.jpg";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "NYSA D LUXURIA — Designing Extraordinary Spaces for Extraordinary Lives" },
+      { title: "NYSA DE LUXURIA — Designing Extraordinary Spaces for Extraordinary Lives" },
       { name: "description", content: "Bespoke luxury interior architecture and turnkey design consultancy for villas, penthouses, residences and hospitality." },
-      { property: "og:title", content: "NYSA D LUXURIA — Luxury Interior Architecture" },
+      { property: "og:title", content: "NYSA DE LUXURIA — Luxury Interior Architecture" },
       { property: "og:description", content: "Bespoke luxury interiors, architecture and turnkey experiences crafted for visionaries." },
       { property: "og:image", content: heroVilla },
       { name: "twitter:image", content: heroVilla },
@@ -113,7 +113,7 @@ function Nav() {
     >
       <div className="max-w-[1600px] mx-auto px-6 md:px-12 flex items-center justify-between">
         <a href="#top" className="font-display text-xl md:text-2xl tracking-[0.25em] text-ivory">
-          NYSA<span className="text-gold mx-2">·</span>D LUXURIA
+          NYSA<span className="text-gold mx-2">·</span>DE LUXURIA
         </a>
         <nav className="hidden lg:flex items-center gap-10 text-[0.72rem] uppercase tracking-[0.25em] text-muted-foreground">
           <a href="#projects" className="hover:text-gold transition-colors">Projects</a>
@@ -175,7 +175,7 @@ function Index() {
           <div className="max-w-[1600px] mx-auto px-6 md:px-12 grid grid-cols-2 md:grid-cols-4 divide-x divide-border">
             {[
               ["150+", "Luxury Projects"],
-              ["₹100Cr+", "Project Value Delivered"],
+              ["₹50Cr+", "Project Value Delivered"],
               ["98%", "Client Satisfaction"],
               ["10+", "Years Design Excellence"],
             ].map(([n, l]) => (
@@ -197,7 +197,7 @@ function Index() {
             <div className="relative aspect-[4/5] overflow-hidden">
               <img
                 src={aboutStudio}
-                alt="NYSA D LUXURIA design studio with architects reviewing villa plans"
+                alt="NYSA DE LUXURIA design studio with architects reviewing villa plans"
                 className="h-full w-full object-cover"
                 loading="lazy"
                 width={1280}
@@ -218,7 +218,7 @@ function Index() {
             </h2>
             <div className="mt-10 space-y-6 text-muted-foreground text-base md:text-[1.05rem] leading-[1.85] max-w-xl">
               <p>
-                At NYSA D LUXURIA, every project begins with understanding the life that will
+                At NYSA DE LUXURIA, every project begins with understanding the life that will
                 unfold within it. We blend architecture, interior design, craftsmanship,
                 technology and luxury experiences to create spaces that reflect identity,
                 aspiration and timeless elegance.
@@ -377,7 +377,7 @@ function Index() {
         <div className="max-w-[1500px] mx-auto">
           <Reveal>
             <div className="text-center mb-20">
-              <p className="eyebrow mb-6">Why NYSA D LUXURIA</p>
+              <p className="eyebrow mb-6">Why NYSA DE LUXURIA</p>
               <h2 className="font-display text-4xl md:text-6xl leading-[1.05]">
                 A decade of <span className="italic text-gold">discerning craft.</span>
               </h2>
@@ -529,9 +529,9 @@ function Index() {
               reach out within 48 hours to schedule your private consultation.
             </p>
             <div className="mt-12 space-y-4 text-sm text-ivory/80">
-              <div className="flex items-center gap-4"><span className="hairline" /> +91 98765 43210</div>
-              <div className="flex items-center gap-4"><span className="hairline" /> studio@nysadluxuria.com</div>
-              <div className="flex items-center gap-4"><span className="hairline" /> Bengaluru · Mumbai · New Delhi</div>
+              <div className="flex items-center gap-4"><span className="hairline" /> +91 9959339998</div>
+              <div className="flex items-center gap-4"><span className="hairline" /> studio@nysadeluxuria.com</div>
+              <div className="flex items-center gap-4"><span className="hairline" /> Hyderabad</div>
             </div>
           </Reveal>
 
@@ -568,7 +568,7 @@ function Index() {
           <div className="grid md:grid-cols-12 gap-12 pb-16 border-b border-border">
             <div className="md:col-span-5">
               <div className="font-display text-2xl tracking-[0.25em] text-ivory">
-                NYSA<span className="text-gold mx-2">·</span>D LUXURIA
+                NYSA<span className="text-gold mx-2">·</span>DE LUXURIA
               </div>
               <p className="mt-6 font-display italic text-2xl md:text-3xl leading-snug text-ivory/85 max-w-md">
                 Design is not what you see.
@@ -578,10 +578,10 @@ function Index() {
 
             <FooterCol title="Studio" items={["About","Philosophy","Press","Careers"]} />
             <FooterCol title="Work"   items={["Projects","Services","Process","Materials"]} />
-            <FooterCol title="Contact" items={["+91 98765 43210","studio@nysadluxuria.com","Bengaluru · Mumbai","Instagram","LinkedIn"]} />
+            <FooterCol title="Contact" items={["+91 9959339998","studio@nysadeluxuria.com","Hyderabad","Instagram","LinkedIn"]} />
           </div>
           <div className="mt-10 flex flex-col md:flex-row md:items-center justify-between gap-4 text-[0.7rem] uppercase tracking-[0.25em] text-muted-foreground">
-            <span>© {new Date().getFullYear()} NYSA D LUXURIA · All rights reserved</span>
+            <span>© {new Date().getFullYear()} NYSA DE LUXURIA · All rights reserved</span>
             <span>Luxury Interior Architecture · Bespoke Design Consultancy · Turnkey Excellence</span>
           </div>
         </div>
