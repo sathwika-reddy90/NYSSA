@@ -77,24 +77,45 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "NYSA D LUXURIA — Luxury Interior Architecture & Bespoke Design" },
-      { name: "description", content: "NYSA D LUXURIA is a luxury interior architecture and turnkey design consultancy crafting bespoke residences, villas, penthouses, and hospitality experiences for discerning visionaries." },
-      { name: "author", content: "NYSA DE LUXURIA" },
-      { property: "og:title", content: "NYSA D LUXURIA — Luxury Interior Architecture & Bespoke Design" },
-      { property: "og:description", content: "NYSA D LUXURIA is a luxury interior architecture and turnkey design consultancy crafting bespoke residences, villas, penthouses, and hospitality experiences for discerning visionaries." },
+      { title: "NYSSA DE LUXURIA — Luxury Interior Architecture & Bespoke Design" },
+      {
+        name: "description",
+        content:
+          "NYSSA DE LUXURIA is a luxury interior architecture and turnkey design consultancy crafting bespoke residences, villas, penthouses, and hospitality experiences for discerning visionaries.",
+      },
+      { name: "author", content: "NYSSA DE LUXURIA" },
+      {
+        property: "og:title",
+        content: "NYSSA DE LUXURIA — Luxury Interior Architecture & Bespoke Design",
+      },
+      {
+        property: "og:description",
+        content:
+          "NYSSA DE LUXURIA is a luxury interior architecture and turnkey design consultancy crafting bespoke residences, villas, penthouses, and hospitality experiences for discerning visionaries.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
-      { name: "twitter:site", content: "@NYSADLuxuria" },
-      { name: "twitter:title", content: "NYSA D LUXURIA — Luxury Interior Architecture & Bespoke Design" },
-      { name: "twitter:description", content: "NYSA D LUXURIA is a luxury interior architecture and turnkey design consultancy crafting bespoke residences, villas, penthouses, and hospitality experiences for discerning visionaries." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/e1acd0ae-aae7-415a-8301-990e26a225e9/id-preview-9df9126b--b5cf8842-f3cb-4cb3-9f53-0d7d46580811.lovable.app-1781242741310.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/e1acd0ae-aae7-415a-8301-990e26a225e9/id-preview-9df9126b--b5cf8842-f3cb-4cb3-9f53-0d7d46580811.lovable.app-1781242741310.png" },
+      { name: "twitter:site", content: "@NYSSADLuxuria" },
+      {
+        name: "twitter:title",
+        content: "NYSSA DE LUXURIA — Luxury Interior Architecture & Bespoke Design",
+      },
+      {
+        name: "twitter:description",
+        content:
+          "NYSSA DE LUXURIA is a luxury interior architecture and turnkey design consultancy crafting bespoke residences, villas, penthouses, and hospitality experiences for discerning visionaries.",
+      },
+      { property: "og:image", content: "/og-image.png" },
+      { name: "twitter:image", content: "/og-image.png" },
     ],
     links: [
       {
         rel: "stylesheet",
         href: appCss,
       },
+      { rel: "icon", type: "image/png", sizes: "32x32", href: "/favicon-32x32.png" },
+      { rel: "icon", type: "image/png", sizes: "16x16", href: "/favicon-16x16.png" },
+      { rel: "apple-touch-icon", sizes: "180x180", href: "/apple-touch-icon.png" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {

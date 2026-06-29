@@ -71,7 +71,7 @@
 
 :root {
   --radius: 0.625rem;
-  /* NYSA D LUXURIA — dark editorial luxury */
+  /* NYSSA DE LUXURIA — dark editorial luxury */
   --background: oklch(0.13 0.005 60);        /* deep charcoal black */
   --foreground: oklch(0.94 0.012 80);         /* warm ivory */
   --card: oklch(0.17 0.006 60);
