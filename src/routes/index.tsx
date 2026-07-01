@@ -10,6 +10,7 @@ import { Reveal, useReveal } from "@/components/Reveal";
 import { Nav } from "@/components/SiteNav";
 import { SiteFooter } from "@/components/SiteFooter";
 
+
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
@@ -58,7 +59,88 @@ function Counter({ to, suffix = "" }: { to: number; suffix?: string }) {
   );
 }
 
+const GOOGLE_SCRIPT_URL =
+  "https://script.google.com/macros/s/AKfycbwBX7FUzrjHMclDUfm4zz3rolhcUVogkLDe2S0uQTsQf1v3Se4mNMIp4vB8miS8bg_t/exec";
+
+const EMPTY_FORM = {
+  name: "",
+  phone: "",
+  email: "",
+  location: "",
+  projectType: "",
+  budgetRange: "",
+  message: "",
+};
+
+const PHONE_REGEX = /^\d{10}$/;
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+function validateForm(data: typeof EMPTY_FORM): string | null {
+  const allFilled = Object.values(data).every((value) => value.trim() !== "");
+  if (!allFilled) {
+    return "Please complete all required fields";
+  }
+  if (!PHONE_REGEX.test(data.phone.trim())) {
+    return "Please enter a valid 10-digit phone number";
+  }
+  if (!EMAIL_REGEX.test(data.email.trim())) {
+    return "Please enter a valid email address";
+  }
+  return null;
+}
+
 function Index() {
+  const [formData, setFormData] = useState(EMPTY_FORM);
+  const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">(
+    "idle"
+  );
+  const [formError, setFormError] = useState<string | null>(null);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (status === "submitting") return; // guards against double-click / double-submit
+
+    const validationError = validateForm(formData);
+    if (validationError) {
+      setFormError(validationError);
+      setStatus("error");
+      return;
+    }
+
+    setFormError(null);
+    setStatus("submitting");
+
+    try {
+      // IMPORTANT: Content-Type must be "text/plain" (a CORS-safelisted type),
+      // NOT "application/json" — a JSON content-type forces the browser to send
+      // a CORS preflight (OPTIONS) request that Apps Script web apps can't
+      // answer, which is what causes "blocked by CORS policy" / "Failed to fetch".
+      //
+      // mode: "no-cors" is used because Apps Script's redirect-based response
+      // doesn't reliably expose Access-Control-Allow-Origin on the *actual*
+      // response body, even though the request itself succeeds server-side.
+      // That mismatch is exactly why the row was being saved to the Sheet
+      // while the browser still failed to parse a response and showed a false
+      // "Something went wrong" error. With no-cors the response is opaque by
+      // design, so success is judged by "the request didn't throw" rather
+      // than by reading response JSON we were never reliably able to read.
+      await fetch(GOOGLE_SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: {
+          "Content-Type": "text/plain;charset=utf-8",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      setStatus("success");
+      setFormData(EMPTY_FORM);
+    } catch (error) {
+      console.error(error);
+      setFormError("Something went wrong sending your request. Please try again or reach us directly.");
+      setStatus("error");
+    }
+  };
   return (
     <div id="top" className="min-h-screen bg-background text-foreground overflow-x-clip">
       <Nav />
@@ -328,26 +410,22 @@ function Index() {
             {[
               {
                 q: "The team didn't just design our home. They transformed how we live.",
-                n: "",
                 r: "SANCIA VILLA · HYDERABAD",
               },
               {
                 q: "The attention to detail exceeded every expectation we had set.",
-                n: "",
                 r: "APARNA ONE · HYDERABAD",
               },
               {
                 q: "Every guest who visits asks who designed this space.",
-                n: "",
                 r: "DUPLEX HOUSE · VIJAYAWADA",
               },
               {
                 q: "A perfect blend of luxury, comfort, and functionality.",
-                n: "",
                 r: "JAYABHERI ELEVATE · HYDERABAD",
               },
             ].map((t, i) => (
-              <Reveal key={t.n} delay={i * 150}>
+              <Reveal key={`${t.r}-${i}`} delay={i * 150}>
                 <figure className="bg-card p-10 md:p-12 h-full border border-border/50 flex flex-col">
                   <div className="font-display text-6xl text-gold leading-none mb-6">"</div>
                   <blockquote className="font-display text-2xl md:text-[1.7rem] leading-[1.35] text-ivory flex-1">
@@ -380,30 +458,30 @@ function Index() {
           </Reveal>
           <Reveal delay={150} className="lg:col-span-5">
             <p className="eyebrow mb-6">
-  <span className="hairline mr-4" />
-  DESIGN PRECISION
-</p>
+              <span className="hairline mr-4" />
+              DESIGN PRECISION
+            </p>
             <h2 className="font-display text-4xl md:text-5xl lg:text-6xl leading-[1.05]">
               Luxury lives <span className="italic text-gold">in the details.</span>
             </h2>
             <p className="mt-8 text-muted-foreground leading-[1.85]">
               Every exceptional interior begins with an exceptional vision.
-At NYSSA DE LUXURIA, every line, proportion, texture, lighting
-effect, and spatial composition is meticulously crafted into
-photorealistic 3D visualizations allowing you to experience
-luxury long before it is built. Every render is designed to
-inspire confidence, evoke emotion, and reflect the timeless
-elegance of bespoke living.
+              At NYSSA DE LUXURIA, every line, proportion, texture, lighting
+              effect, and spatial composition is meticulously crafted into
+              photorealistic 3D visualizations allowing you to experience
+              luxury long before it is built. Every render is designed to
+              inspire confidence, evoke emotion, and reflect the timeless
+              elegance of bespoke living.
             </p>
             <ul className="mt-10 grid grid-cols-2 gap-x-8 gap-y-4 text-sm text-ivory/85">
               {[
-  "Photorealistic 3D Renders",
-  "Bespoke Interior Concepts",
-  "Material & Texture Visualization",
-  "Lighting Design",
-  "Spatial Planning",
-  "Luxury Styling",
-].map((m) => (
+                "Photorealistic 3D Renders",
+                "Bespoke Interior Concepts",
+                "Material & Texture Visualization",
+                "Lighting Design",
+                "Spatial Planning",
+                "Luxury Styling",
+              ].map((m) => (
                 <li key={m} className="flex items-center gap-3">
                   <span className="w-1 h-1 bg-gold rounded-full" />
                   {m}
@@ -454,14 +532,45 @@ elegance of bespoke living.
 
           <Reveal delay={150}>
             <form
-              onSubmit={(e) => e.preventDefault()}
+              onSubmit={handleSubmit}
               className="bg-card/85 backdrop-blur-md border border-border/60 p-8 md:p-12 space-y-6"
             >
               <div className="grid md:grid-cols-2 gap-6">
-                <LuxField label="Name" placeholder="Your full name" />
-                <LuxField label="Phone" placeholder="+91 ..." />
-                <LuxField label="Email" type="email" placeholder="you@domain.com" />
-                <LuxField label="Location" placeholder="City" />
+                <LuxField
+                  label="Name"
+                  placeholder="Your full name"
+                  value={formData.name}
+                  onChange={(e) =>
+                    setFormData({ ...formData, name: e.target.value })
+                  }
+                />
+                <LuxField
+                  label="Phone"
+                  type="tel"
+                  placeholder="9876543210"
+                  value={formData.phone}
+                  onChange={(e) => {
+                    const digitsOnly = e.target.value.replace(/\D/g, "").slice(0, 10);
+                    setFormData({ ...formData, phone: digitsOnly });
+                  }}
+                />
+                <LuxField
+                  label="Email"
+                  type="email"
+                  placeholder="you@domain.com"
+                  value={formData.email}
+                  onChange={(e) =>
+                    setFormData({ ...formData, email: e.target.value })
+                  }
+                />
+                <LuxField
+                  label="Location"
+                  placeholder="City"
+                  value={formData.location}
+                  onChange={(e) =>
+                    setFormData({ ...formData, location: e.target.value })
+                  }
+                />
                 <LuxSelect
                   label="Project Type"
                   options={[
@@ -472,10 +581,29 @@ elegance of bespoke living.
                     "Hospitality",
                     "Other",
                   ]}
+                  value={formData.projectType}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      projectType: e.target.value,
+                    })
+                  }
                 />
                 <LuxSelect
                   label="Budget Range"
-                  options={["₹50L – ₹1Cr", "₹1Cr – ₹3Cr", "₹3Cr – ₹10Cr", "₹10Cr+"]}
+                  options={[
+                    "₹50L - ₹1Cr",
+                    "₹1Cr - ₹3Cr",
+                    "₹3Cr - ₹10Cr",
+                    "₹10Cr+",
+                  ]}
+                  value={formData.budgetRange}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      budgetRange: e.target.value,
+                    })
+                  }
                 />
               </div>
               <div>
@@ -483,14 +611,33 @@ elegance of bespoke living.
                   Message
                 </label>
                 <textarea
-                  rows={4}
+                  value={formData.message}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      message: e.target.value,
+                    })
+                  }
                   placeholder="Tell us about the life you want this space to hold."
                   className="w-full bg-transparent border-b border-border focus:border-gold outline-none py-3 text-ivory placeholder:text-muted-foreground/60 transition-colors"
                 />
               </div>
-              <button type="submit" className="btn-luxe w-full mt-4">
-                Schedule Private Consultation
+              <button
+                type="submit"
+                disabled={status === "submitting"}
+                className="btn-luxe w-full mt-4 disabled:opacity-60 disabled:cursor-not-allowed"
+              >
+                {status === "submitting" ? "Sending…" : "Schedule Private Consultation"}
               </button>
+              {status === "success" && (
+                <p className="text-sm text-gold text-center pt-2">
+                  Thank you — your consultation request has been received. A senior
+                  design principal will reach out within 48 hours.
+                </p>
+              )}
+              {status === "error" && formError && (
+                <p className="text-sm text-red-400 text-center pt-2">{formError}</p>
+              )}
             </form>
           </Reveal>
         </div>
@@ -505,10 +652,14 @@ function LuxField({
   label,
   placeholder,
   type = "text",
+  value,
+  onChange,
 }: {
   label: string;
   placeholder?: string;
   type?: string;
+  value?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }) {
   return (
     <div>
@@ -518,26 +669,44 @@ function LuxField({
       <input
         type={type}
         placeholder={placeholder}
+        value={value}
+        onChange={onChange}
         className="w-full bg-transparent border-b border-border focus:border-gold outline-none py-3 text-ivory placeholder:text-muted-foreground/60 transition-colors"
       />
     </div>
   );
 }
-function LuxSelect({ label, options }: { label: string; options: string[] }) {
+function LuxSelect({
+  label,
+  options,
+  value,
+  onChange,
+}: {
+  label: string;
+  options: string[];
+  value?: string;
+  onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+}) {
   return (
     <div>
       <label className="block text-[0.65rem] uppercase tracking-[0.28em] text-muted-foreground mb-3">
         {label}
       </label>
       <select
-        defaultValue=""
+        value={value}
+        onChange={onChange}
         className="w-full bg-transparent border-b border-border focus:border-gold outline-none py-3 text-ivory transition-colors appearance-none cursor-pointer"
       >
-        <option value="" disabled className="bg-card">
+        <option value="" className="bg-card">
           Select…
         </option>
-        {options.map((o) => (
-          <option key={o} value={o} className="bg-card text-ivory">
+
+        {options.map((o, index) => (
+          <option
+            key={`${o}-${index}`}
+            value={o}
+            className="bg-card text-ivory"
+          >
             {o}
           </option>
         ))}
