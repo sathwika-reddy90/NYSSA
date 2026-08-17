@@ -1,0 +1,60 @@
+name: Build and publish to deploy branch
+
+# Hostinger's Git integration clones a branch and runs Composer — it never runs
+# npm, so it cannot build this project. This workflow does the build and pushes
+# the finished static site to the `deploy` branch, whose root IS the website.
+# Hostinger is configured to pull `deploy` into public_html.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm run build
+
+      # Fail loudly rather than publishing an empty site.
+      - name: Verify build output
+        run: |
+          set -e
+          for f in index.html .htaccess \
+                   projects/aparna-one/index.html \
+                   projects/duplex-house/index.html \
+                   projects/jayabheri-elevate/index.html \
+                   projects/sancia-villa/index.html; do
+            test -s "dist/client/$f" || { echo "MISSING: $f"; exit 1; }
+          done
+          echo "All expected pages present."
+
+      - name: Publish to deploy branch
+        run: |
+          set -e
+          cd dist/client
+          git init -q
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout -q -b deploy
+          git add -A
+          git commit -q -m "Build from ${GITHUB_SHA::7}"
+          # Force-push a single orphan commit so the branch never accumulates
+          # history for 170 MB of image assets.
+          git push -f "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git" deploy
