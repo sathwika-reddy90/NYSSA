@@ -1,0 +1,49 @@
+# NYSSA DE LUXURIA — Apache config for Hostinger shared hosting (public_html).
+# The site is fully prerendered static HTML; there is no Node process.
+# Vite copies this file from public/ into the build output automatically.
+
+# --- Directory indexes -------------------------------------------------------
+# Prerendered routes are emitted as /projects/<slug>/index.html, so Apache
+# resolves /projects/sancia-villa by serving that folder's index.html.
+DirectoryIndex index.html
+Options -Indexes
+
+# --- Unknown routes ----------------------------------------------------------
+# Serves the app shell with a real 404 status; the TanStack router then renders
+# its NotFoundComponent for the requested URL.
+ErrorDocument 404 /index.html
+
+# --- Compression -------------------------------------------------------------
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/javascript application/javascript application/json image/svg+xml
+</IfModule>
+
+# --- Caching -----------------------------------------------------------------
+# Replaces .output/public/_headers, which is a Cloudflare-only format Apache ignores.
+<IfModule mod_headers.c>
+  # Content-hashed filenames — safe to cache forever.
+  <FilesMatch "\.(js|css|woff2?|ttf|otf|eot|svg|png|jpe?g|gif|webp|avif|ico)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+  # HTML is not hashed — must revalidate so deploys go live immediately.
+  <FilesMatch "\.html$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# --- Correct MIME types ------------------------------------------------------
+<IfModule mod_mime.c>
+  AddType application/javascript .js .mjs
+  AddType image/svg+xml .svg
+  AddType font/woff2 .woff2
+</IfModule>
+
+# --- Defence in depth --------------------------------------------------------
+# Nothing below should ever reach public_html, but block it in case a stale
+# source file survives from the previous (source-code) deployment.
+<FilesMatch "(^\.env|^\.git|package(-lock)?\.json|bun\.lock|tsconfig\.json|vite\.config\.ts|\.ts|\.tsx)$">
+  Require all denied
+</FilesMatch>
